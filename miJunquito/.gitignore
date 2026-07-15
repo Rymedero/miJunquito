@@ -1,3 +1,7 @@
+miJunquito.sql
+.env
+supabase/.temp/
+
 # Logs
 logs
 *.log
