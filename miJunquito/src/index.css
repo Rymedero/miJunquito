@@ -2,7 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes hero-logo-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.hero-logo-track {
+  animation: hero-logo-scroll 24s linear infinite;
+  will-change: transform;
+}
+
+.hero-business-logo-track {
+  animation: hero-logo-scroll 30s linear infinite reverse;
+  will-change: transform;
+}
+
+.hero-logo-marquee {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-track {
+    animation: none;
+  }
+
+  .hero-business-logo-track {
+    animation: none;
+  }
+}
+
 .hero-title {
   font-family: Georgia, 'Times New Roman', serif;
   letter-spacing: -0.035em;
+}
+
+@keyframes profile-cover-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.profile-cover-enter {
+  animation: profile-cover-zoom-in 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-cover-enter {
+    animation: none;
+  }
 }

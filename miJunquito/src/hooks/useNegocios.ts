@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getNegocios } from "../services/negocios";
-import type { Negocio } from "../types";
+import type { NegocioListItem } from "../types";
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error && error.message) return error.message;
@@ -9,7 +9,7 @@ function getErrorMessage(error: unknown): string {
 }
 
 export function useNegocios() {
-  const [negocios, setNegocios] = useState<Negocio[]>([]);
+  const [negocios, setNegocios] = useState<NegocioListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

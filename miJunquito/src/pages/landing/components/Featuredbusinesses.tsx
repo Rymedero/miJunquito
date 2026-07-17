@@ -15,7 +15,7 @@ export default function Featuredbusinesses() {
     if (!carousel) return;
 
     carousel.scrollBy({
-      left: direction === "left" ? -250 : 250,
+      left: direction === "left" ? -335 : 335,
       behavior: "smooth",
     });
   };
@@ -105,17 +105,17 @@ export default function Featuredbusinesses() {
                 <article
                   key={negocio.id}
               className="
-                group w-[72vw] max-w-[230px] shrink-0 snap-start
+                group w-[88vw] max-w-[320px] shrink-0 snap-start
                 overflow-hidden rounded-2xl border border-slate-200
                 bg-white shadow-sm transition duration-300
                 hover:-translate-y-1 hover:shadow-lg
-                sm:w-[220px]
-                md:w-[225px]
-                lg:w-[230px]
+                sm:w-[300px]
+                md:w-[310px]
+                lg:w-[320px]
               "
             >
               {/* Imagen compacta */}
-              <div className="relative h-32 overflow-hidden">
+              <div className="relative h-52 overflow-hidden">
                 <img
                   src={negocio.portada_url ?? fallbackBusinessImage}
                   alt={negocio.nombre}
@@ -128,8 +128,8 @@ export default function Featuredbusinesses() {
               </div>
 
               {/* Información compacta */}
-              <div className="p-3.5">
-                <h3 className="truncate text-sm font-extrabold text-slate-950">
+              <div className="p-5">
+                <h3 className="truncate text-base font-extrabold text-slate-950">
                   {negocio.nombre}
                 </h3>
 

@@ -1,21 +1,23 @@
-import { useState } from "react";
-import type { SubmitEvent } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import heroBg from "../../../assets/junquito-hero.jpg";
-
+import logoMiJunquito from "../../../assets/logomijunquito.png";
+import { obtenerLogosNegocios } from "../../../services/buscador";
+import type { DocumentoBusqueda } from "../../../types/busqueda";
 
 export default function HeroJunquito() {
-  const [search, setSearch] = useState("");
+  const logos = Array.from({ length: 6 });
+  const [negociosConLogo, setNegociosConLogo] = useState<DocumentoBusqueda[]>([]);
 
-  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    console.log({
-      search,
+  useEffect(() => {
+    let vigente = true;
+    obtenerLogosNegocios().then((negocios) => {
+      if (vigente) setNegociosConLogo(negocios);
+    }).catch(() => {
+      if (vigente) setNegociosConLogo([]);
     });
-
-    // Aquí luego puedes navegar o filtrar resultados
-    // por ejemplo con react-router
-  };
+    return () => { vigente = false; };
+  }, []);
 
   return (
     <section className="relative overflow-hidden">
@@ -51,87 +53,43 @@ export default function HeroJunquito() {
               atracciones y servicios locales en uno de los destinos más
               encantadores de la montaña.
             </p>
-
-            {/* Search box */}
-            <form
-              onSubmit={handleSubmit}
-              className="mx-auto mt-10 max-w-4xl rounded-3xl border border-white/40 bg-white/95 p-2 shadow-xl shadow-slate-950/15 backdrop-blur-md sm:rounded-full"
-            >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                {/* Input */}
-                <div className="flex-1">
-                  <label htmlFor="search" className="sr-only">
-                    Buscar
-                  </label>
-                  <div className="relative">
-                    <span className="pointer-events-none absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
-                      <svg
-                        className="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        aria-hidden="true"
-                      >
-                        <circle cx="11" cy="11" r="7" />
-                        <path d="m20 20-3.5-3.5" />
-                      </svg>
-                    </span>
-
-                    <input
-                      id="search"
-                      type="text"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      placeholder="¿Qué quieres encontrar en El Junquito?"
-                      className="h-14 w-full rounded-2xl border-0 bg-transparent pl-16 pr-4 text-[15px] text-slate-800 outline-none placeholder:text-slate-400 focus:ring-0 sm:rounded-full sm:text-base"
-                    />
-                  </div>
-                </div>
-
-                {/* Botones */}
-                <div className="flex gap-2 border-t border-slate-100 pt-2 sm:border-l sm:border-t-0 sm:pl-2 sm:pt-0">
-                  <button
-                    type="button"
-                    className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl px-4 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-emerald-700 sm:flex-none sm:rounded-full"
-                  >
-                    <svg
-                      className="h-5 w-5 text-emerald-600"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11Z" />
-                      <circle cx="12" cy="10" r="2.5" />
-                    </svg>
-                    <span className="whitespace-nowrap">Cerca de mí</span>
-                  </button>
-
-                  <button
-                    type="submit"
-                    className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 text-sm font-semibold text-white shadow-md shadow-emerald-700/15 transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:flex-none sm:rounded-full"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      aria-hidden="true"
-                    >
-                      <circle cx="11" cy="11" r="7" />
-                      <path d="m20 20-3.5-3.5" />
-                    </svg>
-                    Buscar
-                  </button>
-                </div>
-              </div>
-            </form>
           </div>
         </div>
       </div>
+
+      <div className="absolute inset-x-0 top-0 border-b border-white/15 bg-slate-950/25 py-2 backdrop-blur-md">
+        <p className="sr-only">Mi Junquito, guía local</p>
+        <div className="hero-logo-marquee overflow-hidden" aria-hidden="true">
+          <div className="hero-logo-track flex w-max items-center">
+            {[0, 1].map((group) => (
+              <div key={group} className="flex shrink-0 items-center gap-14 px-7 sm:gap-20 sm:px-10">
+                {logos.map((_, index) => (
+                  <img key={index} src={logoMiJunquito} alt="" className="h-8 w-24 shrink-0 object-contain brightness-0 invert opacity-70 sm:h-9 sm:w-28" />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {negociosConLogo.length > 0 && (
+        <div className="absolute inset-x-0 bottom-3 py-2">
+          <p className="sr-only">Negocios locales</p>
+          <div className="hero-logo-marquee overflow-hidden">
+            <div className="hero-business-logo-track flex w-max items-center" aria-label="Negocios locales">
+              {[0, 1].map((group) => (
+                <div key={group} className="flex shrink-0 items-center gap-5 px-2.5 sm:gap-7 sm:px-3.5" aria-hidden={group === 1}>
+                  {negociosConLogo.map((negocio) => (
+                    <Link key={negocio.id} to={`/negocios/${negocio.slug}`} className="group flex h-14 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/80 bg-white p-1.5 shadow-lg shadow-slate-950/20 transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:h-16 sm:w-28 sm:p-2" tabIndex={group === 1 ? -1 : undefined}>
+                      <img src={negocio.logoUrl} alt={group === 0 ? negocio.titulo : ""} className="h-full w-full object-contain opacity-100" />
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
